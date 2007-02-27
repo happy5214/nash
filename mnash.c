@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
   int w;
   if (argc < 4)
   {
-    printf("usage: nash2 <kmin> <kmax> <kstep>\n\n\n");
+    printf("usage: %s <kmin> <kmax> <kstep>\n\n\n", argv[0]);
     exit(1);
   }
 
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
       init_weight(k);
       n = nash();
       w = weight();
-      printf("%10u %4d %4d\n", k, n, w);
+      printf("%15u %4d %4d\n", k, n, w);
 /*    } */
   }
   return(0);
