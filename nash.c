@@ -121,10 +121,12 @@ int main(int argc, char* argv[])
     printf("If no base <b> is given, b=2 is assumed.\n");
     printf("By default Proth sequences (k*b^n+1) are assumed.\n");
     printf("For Riesel sequences (k*b^n-1) enter k as -k.\n\n\n");
-    printf("Example (computing the Nash weight for 14*17^n-1):\n\n");
-    printf("   %s -14 17\n\n", argv[0]);
-    printf("   -14 17  803  800\n\n");
-    printf("The first two values are k and b, the third value (803) is the\n");
+    printf("Example (computing the Nash weight for k*3^n-1 for k=10 to k=14):\n\n");
+    printf("   %s -14 -10 2 3\n\n", argv[0]);
+    printf("   -14  3 1524 1523\n");
+	printf("   -12  3 2359 2369\n");
+	printf("   -10  3 4054 4038\n");
+    printf("The first two values are k and b, the third value (1524) is the\n");
     printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
     printf("The forth value is the Nash weight for 0 <= n < 10000.\n");
     exit(1);
