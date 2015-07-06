@@ -15,20 +15,20 @@ mpz_t z;
 int evalue[500];
 int dvalue[500];
 int sva[10000];
-int ecnt;
+unsigned int ecnt;
 
 void init_gmp(unsigned int b)
 {
-  mp_size_t bits = (unsigned int) 1024.0*log(b)/log(2.0);  /* this is just a crude estimate */
+  mp_size_t bits = (mp_size_t) 1024.0*log(b)/log(2.0);  /* this is just a crude estimate */
   mpz_init(z);
   mpz_array_init(*ptab, 512, bits);     /* dummy init */
 }
 
-void init_weight(unsigned int b, long k)
+void init_weight(unsigned int b, mpz_t k)
 {
   unsigned int d, i, n;
 
-  mpz_set_si(z, k);
+  mpz_set(z, k);
 
   for (n=0; n<=511; n++)
   {
@@ -111,11 +111,10 @@ int weight()
 int main(int argc, char* argv[])
 {
   unsigned int b;
-  long k;
-  long kmin, kmax, kstep;
-  char *rest;
+  mpz_t k, kstart, kstop, kstep;
   int n;
   int w;
+  int comp;
   if (argc < 2)
   {
     printf("%s - a tool for computing Nash weights for sequences k*b^n+-1\n\n", argv[0]);
@@ -124,10 +123,12 @@ int main(int argc, char* argv[])
     printf("If no base <b> is given, b=2 is assumed.\n");
     printf("By default Proth sequences (k*b^n+1) are assumed.\n");
     printf("For Riesel sequences (k*b^n-1) enter k as -k.\n\n\n");
-    printf("Example (computing the Nash weight for 14*17^n-1):\n\n");
-    printf("   %s -14 17\n\n", argv[0]);
-    printf("   -14 17  803  800\n\n");
-    printf("The first two values are k and b, the third value (803) is the\n");
+    printf("Example (computing the Nash weight for k*3^n-1 for k=10 to k=14):\n\n");
+    printf("   %s -14 -10 2 3\n\n", argv[0]);
+    printf("   -14  3 1524 1523\n");
+    printf("   -12  3 2359 2369\n");
+    printf("   -10  3 4054 4038\n");
+    printf("The first two values are k and b, the third value (1524) is the\n");
     printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
     printf("The forth value is the Nash weight for 0 <= n < 10000.\n");
     exit(1);
@@ -138,18 +139,32 @@ int main(int argc, char* argv[])
   else
     b = 2;
 
-  kmin = strtol(argv[1], &rest, 10);
-  kmax = strtol(argv[2], &rest, 10);
-  kstep = strtol(argv[3], &rest, 10);
+  mpz_init_set_str(kstart, argv[1], 10);
+  mpz_init_set_str(kstop, argv[2], 10);
+
+  if (argc > 3)
+    mpz_init_set_str(kstep, argv[3], 10);
+  else
+    mpz_init_set_ui(kstep, 2);
 
   init_gmp(b);
 
-  for (k=kmin; k<=kmax; k+=kstep)
+  mpz_init_set(k, kstart);
+  comp = mpz_cmp(k, kstop);
+  if (mpz_cmp(kstart, kstop) > 0)      // if kstart > kstop
+    if (mpz_sgn(kstep) > 0)            // if kstep is positive
+      mpz_neg(kstep, kstep);
+  if (mpz_cmp(kstart, kstop) < 0)      // if kstart < kstop
+    if (mpz_sgn(kstep) < 0)            // if kstep is negative
+      mpz_neg(kstep, kstep);
+
+  while (mpz_cmp(k, kstop)*comp >= 0)  // run until sign of comparison changes
   {
     init_weight(b, k);
     n = nash();
     w = weight();
-    printf("%15ld %d %4d %4d\n", k, b, n, w);
+    gmp_printf("%15Zd %d %4d %4d\n", k, b, n, w);
+    mpz_add(k, k, kstep);
   }
   return(0);
 }
