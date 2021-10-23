@@ -1,6 +1,13 @@
+/* nash.c
+   version 0.5
+   by Thomas Ritschel
+   based on Jack Brennen's Java applet
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <gmp.h>
 
 mpz_t ptab[512];
@@ -10,37 +17,25 @@ int dvalue[500];
 int sva[10000];
 int ecnt;
 
-void my_test(void)
+void init_gmp(unsigned int b)
 {
-  unsigned long n;
-  mpz_t k, z;
+  mp_size_t bits = (unsigned int) 1024.0*log(b)/log(2.0);  /* this is just a crude estimate */
   mpz_init(z);
-  mpz_init_set_str(k, "3", 10);
-  n = 31;
-  mpz_mul_2exp(z, k, n); 
-  mpz_sub_ui(z, z, 1);
-  gmp_printf("%Zd*2^%d-1 = %Zd\n", k, n, z);
+  mpz_array_init(*ptab, 512, bits);     /* dummy init */
 }
 
-void init_gmp(void)
-{
-  mpz_init(z);
-  mpz_array_init(*ptab, 512, 640);  /* dummy-Initialisierung */
-}
-
-void init_weight(char *k)
+void init_weight(unsigned int b, char *k)
 {
   unsigned int d, i, n;
 
   mpz_init_set_str(z, k, 10);
-//  mpz_set_ui(z, k);
 
   for (n=0; n<=511; n++)
   {
 /*    mpz_mul_ui(ptab[n], ptab[n-1], 2); */
-    mpz_sub_ui(ptab[n], z, 1);
-    mpz_mul_2exp(z, z, 1);
-/*    gmp_printf("%d*2^%d-1 = %Zd\n", k, n, ptab[n]); */
+    mpz_add_ui(ptab[n], z, 1);
+    mpz_mul_ui(z, z, b);
+/*    gmp_printf("%d*%d^%d-1 = %Zd\n", k, b, n, ptab[n]); */
   }
 
   ecnt = 0;
@@ -115,22 +110,36 @@ int weight()
 
 int main(int argc, char* argv[])
 {
-//  unsigned long k;
+  unsigned int b;
   int n;
   int w;
   if (argc < 2)
   {
-    printf("usage: %s <k>\n\n\n", argv[0]);
+    printf("%s - a tool for computing Nash weights for sequences k*b^n+-1\n\n", argv[0]);
+    printf("usage: %s <k> <b>\n", argv[0]);
+    printf("or:    %s <k>\n\n", argv[0]);
+    printf("If no base <b> is given, b=2 is assumed.\n");
+    printf("By default Proth sequences (k*b^n+1) are assumed.\n");
+    printf("For Riesel sequences (k*b^n-1) enter k as -k.\n\n\n");
+    printf("Example (computing the Nash weight for 14*17^n-1):\n\n");
+    printf("   %s -14 17\n\n", argv[0]);
+    printf("   -14 17  803  800\n\n");
+    printf("The first two values are k and b, the third value (803) is the\n");
+    printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
+    printf("The forth value is the Nash weight for 0 <= n < 10000.\n");
     exit(1);
   }
 
-//  k = (unsigned long) atol(argv[1]);
+  if (argc > 2)
+    b = (unsigned int) atoi(argv[2]);
+  else
+    b = 2;
 
-  init_gmp();
+  init_gmp(b);
 
-  init_weight(argv[1]);
+  init_weight(b,argv[1]);
   n = nash();
   w = weight();
-  printf("%15s %4d %4d\n", argv[1], n, w);
+  printf("%s %d %4d %4d\n", argv[1], b, n, w);
   return(0);
 }
