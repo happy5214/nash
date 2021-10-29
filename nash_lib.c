@@ -4,8 +4,6 @@
    based on Jack Brennen's Java applet
 */
 
-#include <math.h>
-
 #include <gmp.h>
 
 #include "nash.h"
@@ -15,26 +13,35 @@ typedef struct {
   uint16_t skip;
 } factor_t;
 
-static mpz_t ptab[512];
+static mpz_t ptab[SIEVE_P_TEST_SIZE];
 static mpz_t z;
 static factor_t factors[500];
 static uint16_t factorCount;
 static uint8_t sieveArea[SIEVE_AREA_SIZE];
 
-void init_gmp(unsigned int b)
+void init_nash_gmp()
 {
-  mp_size_t bits = (mp_size_t) 1024*log(b)/log(2.0);  /* this is just a crude estimate */
+  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
+    mpz_init(ptab[i]);
+  }
   mpz_init(z);
-  mpz_array_init(*ptab, 512, bits);     /* dummy init */
 }
 
-void init_weight(unsigned int b, mpz_t k)
+void free_nash_gmp()
+{
+  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
+    mpz_clear(ptab[i]);
+  }
+  mpz_clear(z);
+}
+
+void init_nash_weight(unsigned int b, mpz_t k)
 {
   uint16_t n;
 
   mpz_set(z, k);
 
-  for (n = 0; n <= 511; n++)
+  for (n = 0; n < SIEVE_P_TEST_SIZE; n++)
   {
 /*    mpz_mul_ui(ptab[n], ptab[n-1], 2); */
     mpz_add_ui(ptab[n], z, 1);
@@ -49,7 +56,7 @@ void init_weight(unsigned int b, mpz_t k)
     {
       for (n = 0; n < factorCount; n++)
         if (skip % factors[n].skip == 0 && exponent % factors[n].skip == factors[n].exponent)
-	  break;
+          break;
       if (n >= factorCount)
       {
         mpz_gcd(z, ptab[exponent], ptab[exponent + skip]);
@@ -82,7 +89,7 @@ uint16_t standard_nash_weight()
         sieveArea[exponent - 100000] = 0;
       exponent += skip;
     }
-  }  
+  }
 
   uint16_t sum = 0;
   for (i = 0; i < SIEVE_AREA_SIZE; i++)

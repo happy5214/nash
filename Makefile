@@ -1,5 +1,5 @@
 CC = gcc
-LIBS = -lgmp -lm
+LIBS = -lgmp
 FLAGS = -O2
 
 objs = nash_lib.o
