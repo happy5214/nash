@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
   mpz_init_set_str(k, argv[1], 10);
 
   init_weight(b, k);
-  n = nash();
-  w = weight();
+  n = standard_nash_weight();
+  w = proth_nash_weight();
   printf("%s %d %4d %4d\n", argv[1], b, n, w);
   return 0;
 }

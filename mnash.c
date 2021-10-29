@@ -62,8 +62,8 @@ int main(int argc, char* argv[])
   while (mpz_cmp(k, kstop)*comp >= 0)  // run until sign of comparison changes
   {
     init_weight(b, k);
-    n = nash();
-    w = weight();
+    n = standard_nash_weight();
+    w = proth_nash_weight();
     gmp_printf("%15Zd %d %4d %4d\n", k, b, n, w);
     mpz_add(k, k, kstep);
   }
