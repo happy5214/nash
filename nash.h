@@ -7,11 +7,13 @@
 #ifndef NASH_H
 #define NASH_H 1
 
+#include <stdint.h>
+
 #include <gmp.h>
 
 void init_gmp(unsigned int b);
 void init_weight(unsigned int b, mpz_t k);
-unsigned int standard_nash_weight();
-unsigned int proth_nash_weight();
+uint16_t standard_nash_weight();
+uint16_t proth_nash_weight();
 
 #endif // NASH_H

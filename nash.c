@@ -4,16 +4,19 @@
    based on Jack Brennen's Java applet
 */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include <gmp.h>
 
 #include "nash.h"
 
 int main(int argc, char* argv[])
 {
-  unsigned int b, n, w;
+  unsigned int b;
+  uint16_t n, w;
   mpz_t k;
   if (argc < 2)
   {
@@ -44,6 +47,6 @@ int main(int argc, char* argv[])
   init_weight(b, k);
   n = standard_nash_weight();
   w = proth_nash_weight();
-  printf("%s %d %4d %4d\n", argv[1], b, n, w);
+  printf("%s %d %4" PRIu16 " %4" PRIu16 "\n", argv[1], b, n, w);
   return 0;
 }

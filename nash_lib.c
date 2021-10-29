@@ -11,10 +11,10 @@
 
 static mpz_t ptab[512];
 static mpz_t z;
-static unsigned int evalue[500];
-static unsigned int dvalue[500];
-static unsigned int sva[10000];
-static unsigned int ecnt;
+static uint16_t exponentValues[500];
+static uint16_t skipValues[500];
+static uint8_t sieveArea[10000];
+static uint16_t divisorCount;
 
 void init_gmp(unsigned int b)
 {
@@ -25,11 +25,11 @@ void init_gmp(unsigned int b)
 
 void init_weight(unsigned int b, mpz_t k)
 {
-  unsigned int d, i, n;
+  uint16_t n;
 
   mpz_set(z, k);
 
-  for (n=0; n<=511; n++)
+  for (n = 0; n <= 511; n++)
   {
 /*    mpz_mul_ui(ptab[n], ptab[n-1], 2); */
     mpz_add_ui(ptab[n], z, 1);
@@ -37,72 +37,76 @@ void init_weight(unsigned int b, mpz_t k)
 /*    gmp_printf("%d*%d^%d-1 = %Zd\n", k, b, n, ptab[n]); */
   }
 
-  ecnt = 0;
-  for (d=1; d<=256; d++)
-    for (i=0; i<d; i++)
+  uint16_t exponent, skip;
+  divisorCount = 0;
+  for (skip = 1; skip <= 256; skip++)
+    for (exponent = 0; exponent < skip; exponent++)
     {
-      for (n=0; n<ecnt; n++)
-        if (d%dvalue[n] == 0 && i%dvalue[n] == evalue[n])
+      for (n = 0; n < divisorCount; n++)
+        if (skip % skipValues[n] == 0 && exponent % skipValues[n] == exponentValues[n])
 	  break;
-      if (n >= ecnt)
+      if (n >= divisorCount)
       {
-        mpz_gcd(z, ptab[i], ptab[i+d]);
+        mpz_gcd(z, ptab[exponent], ptab[exponent + skip]);
         if (mpz_cmp_ui(z, 1) > 0)
         {
-          evalue[ecnt] = i;
-          dvalue[ecnt] = d;
-          ecnt++;
+          exponentValues[divisorCount] = exponent;
+          skipValues[divisorCount] = skip;
+          divisorCount++;
        /*   printf("Eliminate %d, step %d\n", i, d); */
         }
       }
     }
 }
 
-unsigned int standard_nash_weight()
+uint16_t standard_nash_weight()
 {
-  unsigned int i, d, n;
-  for (i=0; i<10000; i++)
-    sva[i] = 1;
+  uint16_t i;
+  for (i = 0; i < 10000; i++)
+    sieveArea[i] = 1;
 
-  for (n=0; n<ecnt; n++)
+  uint32_t exponent;
+  uint16_t skip;
+  for (i = 0; i < divisorCount; i++)
   {
-    i = evalue[n];
-    d = dvalue[n];
-    while (i<110000)
+    exponent = exponentValues[i];
+    skip = skipValues[i];
+    while (exponent < 110000)
     {
-      if (i >= 100000)
-        sva[i-100000] = 0;
-      i += d;
+      if (exponent >= 100000)
+        sieveArea[exponent - 100000] = 0;
+      exponent += skip;
     }
   }  
 
-  n = 0;
-  for (i=0; i<10000; i++)
-    n += sva[i];
+  uint16_t sum = 0;
+  for (i = 0; i < 10000; i++)
+    sum += sieveArea[i];
 
-  return n;
+  return sum;
 }
 
-unsigned int proth_nash_weight()
+uint16_t proth_nash_weight()
 {
-  unsigned int i, d, n;
-  for (i=0; i<10000; i++)
-    sva[i] = 1;
+  uint16_t i;
+  for (i = 0; i < 10000; i++)
+    sieveArea[i] = 1;
 
-  for (n=0; n<ecnt; n++)
+  uint16_t exponent, skip;
+  for (i = 0; i < divisorCount; i++)
   {
-    i = evalue[n];
-    d = dvalue[n];
-    while (i<10000)
+    exponent = exponentValues[i];
+    skip = skipValues[i];
+    while (exponent < 10000)
     {
-      sva[i] = 0;
-      i += d;
+      sieveArea[exponent] = 0;
+      exponent += skip;
     }
   }
 
-  n = 0;
-  for (i=0; i<10000; i++)
-    n += sva[i];
+  uint16_t sum = 0;
+  for (i = 0; i < 10000; i++)
+    sum += sieveArea[i];
 
-  return n;
+  return sum;
 }
