@@ -5,16 +5,21 @@
 */
 
 #include <math.h>
+
 #include <gmp.h>
 
 #include "nash.h"
 
+typedef struct {
+  uint16_t exponent;
+  uint16_t skip;
+} factor_t;
+
 static mpz_t ptab[512];
 static mpz_t z;
-static uint16_t exponentValues[500];
-static uint16_t skipValues[500];
-static uint8_t sieveArea[10000];
-static uint16_t divisorCount;
+static factor_t factors[500];
+static uint16_t factorCount;
+static uint8_t sieveArea[SIEVE_AREA_SIZE];
 
 void init_gmp(unsigned int b)
 {
@@ -38,21 +43,21 @@ void init_weight(unsigned int b, mpz_t k)
   }
 
   uint16_t exponent, skip;
-  divisorCount = 0;
+  factorCount = 0;
   for (skip = 1; skip <= 256; skip++)
     for (exponent = 0; exponent < skip; exponent++)
     {
-      for (n = 0; n < divisorCount; n++)
-        if (skip % skipValues[n] == 0 && exponent % skipValues[n] == exponentValues[n])
+      for (n = 0; n < factorCount; n++)
+        if (skip % factors[n].skip == 0 && exponent % factors[n].skip == factors[n].exponent)
 	  break;
-      if (n >= divisorCount)
+      if (n >= factorCount)
       {
         mpz_gcd(z, ptab[exponent], ptab[exponent + skip]);
         if (mpz_cmp_ui(z, 1) > 0)
         {
-          exponentValues[divisorCount] = exponent;
-          skipValues[divisorCount] = skip;
-          divisorCount++;
+          factors[factorCount].exponent = exponent;
+          factors[factorCount].skip = skip;
+          factorCount++;
        /*   printf("Eliminate %d, step %d\n", i, d); */
         }
       }
@@ -62,15 +67,15 @@ void init_weight(unsigned int b, mpz_t k)
 uint16_t standard_nash_weight()
 {
   uint16_t i;
-  for (i = 0; i < 10000; i++)
+  for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sieveArea[i] = 1;
 
   uint32_t exponent;
   uint16_t skip;
-  for (i = 0; i < divisorCount; i++)
+  for (i = 0; i < factorCount; i++)
   {
-    exponent = exponentValues[i];
-    skip = skipValues[i];
+    exponent = factors[i].exponent;
+    skip = factors[i].skip;
     while (exponent < 110000)
     {
       if (exponent >= 100000)
@@ -80,7 +85,7 @@ uint16_t standard_nash_weight()
   }  
 
   uint16_t sum = 0;
-  for (i = 0; i < 10000; i++)
+  for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sum += sieveArea[i];
 
   return sum;
@@ -89,14 +94,14 @@ uint16_t standard_nash_weight()
 uint16_t proth_nash_weight()
 {
   uint16_t i;
-  for (i = 0; i < 10000; i++)
+  for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sieveArea[i] = 1;
 
   uint16_t exponent, skip;
-  for (i = 0; i < divisorCount; i++)
+  for (i = 0; i < factorCount; i++)
   {
-    exponent = exponentValues[i];
-    skip = skipValues[i];
+    exponent = factors[i].exponent;
+    skip = factors[i].skip;
     while (exponent < 10000)
     {
       sieveArea[exponent] = 0;
@@ -105,7 +110,7 @@ uint16_t proth_nash_weight()
   }
 
   uint16_t sum = 0;
-  for (i = 0; i < 10000; i++)
+  for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sum += sieveArea[i];
 
   return sum;

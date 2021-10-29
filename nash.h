@@ -11,6 +11,8 @@
 
 #include <gmp.h>
 
+#define SIEVE_AREA_SIZE 10000
+
 void init_gmp(unsigned int b);
 void init_weight(unsigned int b, mpz_t k);
 uint16_t standard_nash_weight();
