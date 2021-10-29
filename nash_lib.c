@@ -58,7 +58,7 @@ void init_weight(unsigned int b, mpz_t k)
     }
 }
 
-unsigned int nash()
+unsigned int standard_nash_weight()
 {
   unsigned int i, d, n;
   for (i=0; i<10000; i++)
@@ -83,7 +83,7 @@ unsigned int nash()
   return n;
 }
 
-unsigned int weight()
+unsigned int proth_nash_weight()
 {
   unsigned int i, d, n;
   for (i=0; i<10000; i++)
