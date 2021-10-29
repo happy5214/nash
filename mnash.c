@@ -4,19 +4,20 @@
    based on Jack Brennen's Java applet
 */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include <gmp.h>
 
 #include "nash.h"
 
 int main(int argc, char* argv[])
 {
-  unsigned int b, n, w;
+  unsigned int b;
+  uint16_t n, w;
   mpz_t k, kstart, kstop, kstep;
-  int n;
-  int w;
   int limit;
   int lsign = 1;
   int comp;
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
     n = standard_nash_weight();
     w = proth_nash_weight();
 	if (((lsign == 1) && ((w <= limit) || (n <= limit))) || ((lsign == -1) && ((w >= limit) || (n >= limit))))
-      gmp_printf("%15Zd %d %4d %4d\n", k, b, n, w);
+      gmp_printf("%15Zd %d %4" PRIu16 " %4" PRIu16 "\n", k, b, n, w);
     mpz_add(k, k, kstep);
   }
   return 0;
