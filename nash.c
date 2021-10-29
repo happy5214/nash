@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
   else
     b = 2;
 
-  init_gmp(b);
+  init_nash_gmp();
 
   mpz_init_set_str(k, argv[1], 10);
 
-  init_weight(b, k);
+  init_nash_weight(b, k);
   n = standard_nash_weight();
   w = proth_nash_weight();
   printf("%s %d %4" PRIu16 " %4" PRIu16 "\n", argv[1], b, n, w);
