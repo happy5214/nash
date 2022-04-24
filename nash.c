@@ -40,8 +40,6 @@ int main(int argc, char* argv[])
   else
     b = 2;
 
-  init_nash_gmp();
-
   mpz_init_set_str(k, argv[1], 10);
 
   init_nash_weight(b, k);
