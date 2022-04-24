@@ -14,8 +14,11 @@
 #define SIEVE_AREA_SIZE 10000
 #define SIEVE_P_TEST_SIZE 512
 
-void init_nash_gmp();
-void free_nash_gmp();
+typedef struct {
+  uint16_t exponent;
+  uint16_t skip;
+} factor_t;
+
 void init_nash_weight(unsigned int b, mpz_t k);
 uint16_t standard_nash_weight();
 uint16_t proth_nash_weight();
