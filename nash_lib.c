@@ -8,38 +8,20 @@
 
 #include "nash.h"
 
-typedef struct {
-  uint16_t exponent;
-  uint16_t skip;
-} factor_t;
-
-static mpz_t ptab[SIEVE_P_TEST_SIZE];
-static mpz_t z;
 static factor_t factors[500];
 static uint16_t factorCount;
-static uint8_t sieveArea[SIEVE_AREA_SIZE];
-
-void init_nash_gmp()
-{
-  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
-    mpz_init(ptab[i]);
-  }
-  mpz_init(z);
-}
-
-void free_nash_gmp()
-{
-  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
-    mpz_clear(ptab[i]);
-  }
-  mpz_clear(z);
-}
 
 void init_nash_weight(unsigned int b, mpz_t k)
 {
-  uint16_t n;
+  mpz_t ptab[SIEVE_P_TEST_SIZE];
+  mpz_t z;
 
-  mpz_set(z, k);
+  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
+    mpz_init(ptab[i]);
+  }
+  mpz_init_set(z, k);
+
+  uint16_t n;
 
   for (n = 0; n < SIEVE_P_TEST_SIZE; n++)
   {
@@ -69,10 +51,17 @@ void init_nash_weight(unsigned int b, mpz_t k)
         }
       }
     }
+
+  for (int i = 0; i < SIEVE_P_TEST_SIZE; i++) {
+    mpz_clear(ptab[i]);
+  }
+  mpz_clear(z);
 }
 
 uint16_t standard_nash_weight()
 {
+  uint8_t sieveArea[SIEVE_AREA_SIZE];
+
   uint16_t i;
   for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sieveArea[i] = 1;
@@ -100,6 +89,8 @@ uint16_t standard_nash_weight()
 
 uint16_t proth_nash_weight()
 {
+  uint8_t sieveArea[SIEVE_AREA_SIZE];
+
   uint16_t i;
   for (i = 0; i < SIEVE_AREA_SIZE; i++)
     sieveArea[i] = 1;

@@ -73,8 +73,6 @@ int main(int argc, char* argv[])
   else
     mpz_init_set_ui(kstep, 2);
 
-  init_nash_gmp();
-
   mpz_init_set(k, kstart);
   comp = mpz_cmp(k, kstop);
   if (mpz_cmp(kstart, kstop) > 0)      // if kstart > kstop
