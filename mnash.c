@@ -13,6 +13,8 @@
 
 #include "nash.h"
 
+static const char * invocation_name = "mnash";
+
 int main(int argc, char* argv[])
 {
   unsigned int b;
@@ -22,11 +24,15 @@ int main(int argc, char* argv[])
   int lsign = 1;
   int comp;
   mpz_t k, kstart, kstop, kstep;
+
+  if (argc > 0)
+    invocation_name = argv[0];
+
   if (argc < 2)
   {
-    printf("%s - a tool for computing Nash weights for sequences k*b^n+-1\n\n", argv[0]);
-    printf("usage: %s <kmin> <kmax> <kstep> <b> <limit>\n", argv[0]);
-    printf("or:    %s <kmin> <kmax> <kstep>\n\n", argv[0]);
+    printf("%s - a tool for computing Nash weights for sequences k*b^n+-1\n\n", invocation_name);
+    printf("usage: %s <kmin> <kmax> <kstep> <b> <limit>\n", invocation_name);
+    printf("or:    %s <kmin> <kmax> <kstep>\n\n", invocation_name);
 	printf("The parameters <b> and <limit> are optional.\n");
     printf("If no base <b> is given, b=2 is assumed.\n\n");
 	printf("The parameter <limit> controls the printing:\n");
@@ -39,7 +45,7 @@ int main(int argc, char* argv[])
     printf("By default Proth sequences (k*b^n+1) are assumed.\n");
     printf("For Riesel sequences (k*b^n-1) enter k as -k.\n\n\n");
     printf("Example (computing the Nash weight for k*3^n-1 for k=10 to k=14):\n\n");
-    printf("   %s -14 -10 2 3\n\n", argv[0]);
+    printf("   %s -14 -10 2 3\n\n", invocation_name);
     printf("   -14  3 1524 1523\n");
     printf("   -12  3 2359 2369\n");
     printf("   -10  3 4054 4038\n");
