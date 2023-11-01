@@ -4,6 +4,7 @@
    based on Jack Brennen's Java applet
 */
 
+#include <bitset>
 #include <vector>
 
 #include <gmpxx.h>
@@ -46,7 +47,8 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 }
 
 std::vector<bool> NashSieve::sieve(unsigned int min, unsigned int max) {
-	unsigned int sieveSize = max - min;
+	const unsigned int sieveSize = max - min;
+
 	std::vector<bool> sieveData;
 	sieveData.assign(sieveSize, true);
 
@@ -65,23 +67,38 @@ std::vector<bool> NashSieve::sieve(unsigned int min, unsigned int max) {
 	return sieveData;
 }
 
-unsigned int NashSieve::standard_nash_weight() {
-	return calculate_nash_weight(100000, 110000);
-}
+template <std::size_t sieveSize>
+std::bitset<sieveSize> NashSieve::sieve(std::size_t min) {
+	const std::size_t max = min + sieveSize;
 
-unsigned int NashSieve::proth_nash_weight() {
-	return calculate_nash_weight(0, 10000);
-}
+	std::bitset<sieveSize> sieveData;
+	sieveData.set();
 
-unsigned int NashSieve::calculate_nash_weight(unsigned int min, unsigned int max) {
-	std::vector<bool> sieveData = sieve(min, max);
-
-	unsigned int sum = 0;
-	for (std::vector<bool>::size_type i = 0; i < sieveData.size(); i++) {
-		if (sieveData[i]) {
-			sum++;
+	unsigned int exponent, skip;
+	for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
+		exponent = factors[i].first;
+		skip = factors[i].second;
+		while (exponent < max) {
+			if (exponent >= min) {
+				sieveData.reset(exponent - min);
+			}
+			exponent += skip;
 		}
 	}
 
-	return sum;
+	return sieveData;
+}
+
+unsigned int NashSieve::standard_nash_weight() {
+	return calculate_nash_weight(100000);
+}
+
+unsigned int NashSieve::proth_nash_weight() {
+	return calculate_nash_weight(0);
+}
+
+unsigned int NashSieve::calculate_nash_weight(unsigned int min) {
+	std::bitset<10000> sieveData = sieve<10000>(min);
+
+	return sieveData.count();
 }
