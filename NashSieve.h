@@ -7,6 +7,7 @@
 #ifndef NASH_SIEVE_H
 #define NASH_SIEVE_H 1
 
+#include <bitset>
 #include <utility>
 #include <vector>
 
@@ -19,6 +20,8 @@ public:
 	NashSieve(unsigned int base, mpz_class k);
 
 	std::vector<bool> sieve(unsigned int min, unsigned int max);
+	template <std::size_t sieveSize>
+	std::bitset<sieveSize> sieve(std::size_t min);
 
 	unsigned int standard_nash_weight();
 	unsigned int proth_nash_weight();
@@ -26,7 +29,7 @@ public:
 private:
 	std::vector<Factor> factors;
 
-	unsigned int calculate_nash_weight(unsigned int min, unsigned int max);
+	unsigned int calculate_nash_weight(unsigned int min);
 };
 
 #endif // NASH_SIEVE_H
