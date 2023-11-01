@@ -27,15 +27,17 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 
 	unsigned int exponent, skip;
 	for (skip = 1; skip <= SIEVE_LIMIT; skip++) {
-		for (exponent = 0; exponent < skip; exponent++) {
-			bool foundFactor = false;
-			for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-				if (skip % factors[i].second == 0 && exponent % factors[i].second == factors[i].first) {
-					foundFactor = true;
-					break;
+		std::bitset<SIEVE_LIMIT> offsets;
+		offsets.set();
+		for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
+			if (skip % factors[i].second == 0) {
+				for (unsigned int j = factors[i].first; j < SIEVE_LIMIT; j += factors[i].second) {
+					offsets.reset(j);
 				}
 			}
-			if (!foundFactor) {
+		}
+		for (exponent = 0; exponent < skip; exponent++) {
+			if (offsets.test(exponent)) {
 				temp = gcd(pTable[exponent], pTable[exponent + skip]);
 				if (temp > 1) {
 					factors.push_back(std::make_pair(exponent, skip));
