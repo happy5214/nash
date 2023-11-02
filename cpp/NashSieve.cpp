@@ -41,6 +41,9 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 				temp = gcd(pTable[exponent], pTable[exponent + skip]);
 				if (temp > 1) {
 					factors.push_back(std::make_pair(exponent, skip));
+					for (unsigned int j = exponent; j < SIEVE_LIMIT; j += skip) {
+						offsets.reset(j);
+					}
 					/*   printf("Eliminate %d, step %d\n", i, d); */
 				}
 			}
