@@ -25,25 +25,22 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 		/*    gmp_printf("%d*%d^%d-1 = %Zd\n", k, base, n, pTable[n]); */
 	}
 
-	unsigned int exponent, skip;
-	for (skip = 1; skip <= SIEVE_LIMIT; skip++) {
+	unsigned int offset, modulus;
+	for (modulus = 1; modulus <= SIEVE_LIMIT; modulus++) {
 		std::bitset<SIEVE_LIMIT> offsets;
 		offsets.set();
 		for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-			if (skip % factors[i].second == 0) {
-				for (unsigned int j = factors[i].first; j < SIEVE_LIMIT; j += factors[i].second) {
+			if (modulus % factors[i].second == 0) {
+				for (unsigned int j = factors[i].first; j < modulus; j += factors[i].second) {
 					offsets.reset(j);
 				}
 			}
 		}
-		for (exponent = 0; exponent < skip; exponent++) {
-			if (offsets.test(exponent)) {
-				temp = gcd(pTable[exponent], pTable[exponent + skip]);
+		for (offset = 0; offset < modulus; offset++) {
+			if (offsets.test(offset)) {
+				temp = gcd(pTable[offset], pTable[offset + modulus]);
 				if (temp > 1) {
-					factors.push_back(std::make_pair(exponent, skip));
-					for (unsigned int j = exponent; j < SIEVE_LIMIT; j += skip) {
-						offsets.reset(j);
-					}
+					factors.push_back(std::make_pair(offset, modulus));
 					/*   printf("Eliminate %d, step %d\n", i, d); */
 				}
 			}
@@ -57,15 +54,15 @@ std::vector<bool> NashSieve::sieve(unsigned int min, unsigned int max) {
 	std::vector<bool> sieveData;
 	sieveData.assign(sieveSize, true);
 
-	unsigned int exponent, skip;
+	unsigned int n, modulus;
 	for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-		exponent = factors[i].first;
-		skip = factors[i].second;
-		while (exponent < max) {
-			if (exponent >= min) {
-				sieveData[exponent - min] = false;
+		n = factors[i].first;
+		modulus = factors[i].second;
+		while (n < max) {
+			if (n >= min) {
+				sieveData[n - min] = false;
 			}
-			exponent += skip;
+			n += modulus;
 		}
 	}
 
@@ -79,15 +76,15 @@ std::bitset<sieveSize> NashSieve::sieve(std::size_t min) {
 	std::bitset<sieveSize> sieveData;
 	sieveData.set();
 
-	unsigned int exponent, skip;
+	unsigned int n, modulus;
 	for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-		exponent = factors[i].first;
-		skip = factors[i].second;
-		while (exponent < max) {
-			if (exponent >= min) {
-				sieveData.reset(exponent - min);
+		n = factors[i].first;
+		modulus = factors[i].second;
+		while (n < max) {
+			if (n >= min) {
+				sieveData.reset(n - min);
 			}
-			exponent += skip;
+			n += modulus;
 		}
 	}
 
