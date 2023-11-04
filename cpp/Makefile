@@ -2,7 +2,7 @@ CPP = g++
 LIBS = -lgmp -lgmpxx
 FLAGS = -O2
 
-objs = NashSieve.o
+objs = NashSieve.o arg_parser.o
 headers = NashSieve.h
 
 mnash_objs = mnash.o $(objs)
@@ -19,6 +19,9 @@ mnash: $(mnash_objs)
 	$(CPP) -o $@ $(mnash_objs) $(LIBS)
 
 %.o: %.cpp $(headers)
+	$(CPP) -c -o $@ $< $(FLAGS)
+
+%.o: %.cc
 	$(CPP) -c -o $@ $< $(FLAGS)
 
 clean: 
