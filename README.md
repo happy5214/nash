@@ -15,5 +15,4 @@ into the `nash_lib.c` module, and this code can be found in the `c/` folder. A
 partial rewrite/port in C++ can be found in the `cpp/` folder, and this contains
 a couple of speed improvements.
 
-The license of this program is uncertain. The original source was publicly
-shared, and I have no reason to believe the author intended to restrict its use.
+This program is licensed under the MIT License.
