@@ -8,7 +8,7 @@ headers = NashSieve.h
 mnash_objs = mnash.o $(objs)
 nash_objs = nash.o $(objs)
 
-.PHONY: all
+.PHONY: all clean
 
 all: nash mnash
 
