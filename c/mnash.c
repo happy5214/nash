@@ -19,7 +19,6 @@ int main(int argc, char* argv[])
 {
   unsigned int b;
   uint16_t n, w;
-  mpz_t k, kstart, kstop, kstep;
   int limit;
   int lsign = 1;
   int comp;

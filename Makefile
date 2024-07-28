@@ -1,6 +1,6 @@
 MAKE = make
 
-.PHONY: all
+.PHONY: all c cpp
 
 all: c cpp
 
