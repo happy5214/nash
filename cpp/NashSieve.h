@@ -8,6 +8,7 @@
 #define NASH_SIEVE_H 1
 
 #include <bitset>
+#include <forward_list>
 #include <utility>
 #include <vector>
 
@@ -27,7 +28,7 @@ public:
 	unsigned int proth_nash_weight();
 
 private:
-	std::vector<Factor> factors;
+	std::forward_list<Factor> factors;
 
 	unsigned int calculate_nash_weight(unsigned int min);
 };

@@ -29,9 +29,9 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 	for (modulus = 1; modulus <= SIEVE_LIMIT; modulus++) {
 		std::bitset<SIEVE_LIMIT> offsets;
 		offsets.set();
-		for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-			if (modulus % factors[i].second == 0) {
-				for (unsigned int j = factors[i].first; j < modulus; j += factors[i].second) {
+		for (const Factor& factor : factors) {
+			if (modulus % factor.second == 0) {
+				for (unsigned int j = factor.first; j < modulus; j += factor.second) {
 					offsets.reset(j);
 				}
 			}
@@ -40,7 +40,7 @@ NashSieve::NashSieve(unsigned int base, mpz_class k) {
 			if (offsets.test(offset)) {
 				temp = gcd(pTable[offset], pTable[offset + modulus]);
 				if (temp > 1) {
-					factors.push_back(std::make_pair(offset, modulus));
+					factors.push_front(std::make_pair(offset, modulus));
 					/*   printf("Eliminate %d, step %d\n", i, d); */
 				}
 			}
@@ -55,14 +55,12 @@ std::vector<bool> NashSieve::sieve(unsigned int min, unsigned int max) {
 	sieveData.assign(sieveSize, true);
 
 	unsigned int n, modulus;
-	for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-		n = factors[i].first;
-		modulus = factors[i].second;
-		while (n < max) {
-			if (n >= min) {
-				sieveData[n - min] = false;
-			}
-			n += modulus;
+	for (const Factor& factor : factors) {
+		n = factor.first;
+		modulus = factor.second;
+		for (; n < min; n += modulus) {}
+		for (; n < max; n += modulus) {
+			sieveData[n - min] = false;
 		}
 	}
 
@@ -77,14 +75,12 @@ std::bitset<sieveSize> NashSieve::sieve(std::size_t min) {
 	sieveData.set();
 
 	unsigned int n, modulus;
-	for (std::vector<Factor>::size_type i = 0; i < factors.size(); i++) {
-		n = factors[i].first;
-		modulus = factors[i].second;
-		while (n < max) {
-			if (n >= min) {
-				sieveData.reset(n - min);
-			}
-			n += modulus;
+	for (const Factor& factor : factors) {
+		n = factor.first;
+		modulus = factor.second;
+		for (; n < min; n += modulus) {}
+		for (; n < max; n += modulus) {
+			sieveData.reset(n - min);
 		}
 	}
 
