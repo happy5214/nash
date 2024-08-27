@@ -12,7 +12,7 @@
 #include "NashSieve.h"
 
 #define SIEVE_LIMIT 256
-#define SIEVE_P_TEST_SIZE SIEVE_LIMIT << 2
+#define SIEVE_P_TEST_SIZE SIEVE_LIMIT * 2
 
 NashSieve::NashSieve(unsigned int base, mpz_class k) {
 	mpz_class pTable[SIEVE_P_TEST_SIZE];
