@@ -93,20 +93,17 @@ int main(int argc, char* argv[]) {
 		base_str = "2";
 	}
 
-	unsigned int standardWeight, prothWeight;
-
 	mpz_class k, kstart, kstop, kstep;
 	kstart = k_min;
 	kstop = k_max;
 	kstep = k_step;
-
 	k = kstart;
 
 	const unsigned int base = (unsigned int) std::stoi(base_str);
 
 	const int stepSign = sgn(kstep);
 	if (stepSign == 0) {
-		fprintf(stderr, "Cannot use step of 0. Exiting.\n");
+		std::cerr << "Cannot use step of 0. Exiting." << std::endl;
 		return 1;
 	}
 
@@ -117,9 +114,9 @@ int main(int argc, char* argv[]) {
 	const int comp = cmp(k, kstop);
 
 	while (cmp(k, kstop) * comp >= 0) {  // run until sign of comparison changes
-		NashSieve siever(base, isRiesel ? -k : k);
-		standardWeight = siever.standard_nash_weight();
-		prothWeight = siever.proth_nash_weight();
+		const NashSieve siever(base, isRiesel ? -k : k);
+		const unsigned long int standardWeight = siever.standard_nash_weight();
+		const unsigned long int prothWeight = siever.proth_nash_weight();
 		if ((minimumWeight <= maximumWeight && (standardWeight >= minimumWeight && standardWeight <= maximumWeight)) ||
 			(minimumWeight > maximumWeight && (standardWeight >= minimumWeight || standardWeight <= maximumWeight))) {
 			gmp_printf("%15Zd %d %4u %4u\n", k, base, standardWeight, prothWeight);

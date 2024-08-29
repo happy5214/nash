@@ -77,13 +77,12 @@ int main(int argc, char* argv[]) {
 	}
 
 	const unsigned int base = (unsigned int) std::stoi(base_str);
-	unsigned int standardWeight, prothWeight;
 	mpz_class k;
 	k = k_str;
 
-	NashSieve siever(base, isRiesel ? -k : k);
-	standardWeight = siever.standard_nash_weight();
-	prothWeight = siever.proth_nash_weight();
+	const NashSieve siever(base, isRiesel ? -k : k);
+	const unsigned int standardWeight = siever.standard_nash_weight();
+	const unsigned int prothWeight = siever.proth_nash_weight();
 	printf("%s %u %4u %4u\n", k_str.c_str(), base, standardWeight, prothWeight);
 
 	return 0;
