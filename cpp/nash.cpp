@@ -80,6 +80,12 @@ int main(int argc, char* argv[]) {
 	mpz_class k;
 	k = k_str;
 
+	const int kSign = sgn(k);
+	if (kSign == 0) {
+		std::cerr << "k cannot be 0" << std::endl;
+		return 1;
+	}
+
 	const NashSieve siever(base, isRiesel ? -k : k);
 	const unsigned int standardWeight = siever.standard_nash_weight();
 	const unsigned int prothWeight = siever.proth_nash_weight();

@@ -115,8 +115,8 @@ int main(int argc, char* argv[]) {
 
 	while (cmp(k, kstop) * comp >= 0) {  // run until sign of comparison changes
 		const NashSieve siever(base, isRiesel ? -k : k);
-		const unsigned long int standardWeight = siever.standard_nash_weight();
-		const unsigned long int prothWeight = siever.proth_nash_weight();
+		const unsigned int standardWeight = siever.standard_nash_weight();
+		const unsigned int prothWeight = siever.proth_nash_weight();
 		if ((minimumWeight <= maximumWeight && (standardWeight >= minimumWeight && standardWeight <= maximumWeight)) ||
 			(minimumWeight > maximumWeight && (standardWeight >= minimumWeight || standardWeight <= maximumWeight))) {
 			gmp_printf("%15Zd %d %4u %4u\n", k, base, standardWeight, prothWeight);
