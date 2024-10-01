@@ -1,15 +1,28 @@
-MAKE = make
+CPP = g++
+LIBS = -lgmp -lgmpxx
+FLAGS = -O2
 
-.PHONY: all c cpp clean
+objs = NashSieve.o arg_parser.o
+headers = NashSieve.h
 
-all: c cpp
+mnash_objs = mnash.o $(objs)
+nash_objs = nash.o $(objs)
 
-c:
-	$(MAKE) -C ./c all
+.PHONY: all clean
 
-cpp:
-	$(MAKE) -C ./cpp all
+all: nash mnash
 
-clean:
-	$(MAKE) -C ./c clean
-	$(MAKE) -C ./cpp clean
+nash: $(nash_objs)
+	$(CPP) -o $@ $(nash_objs) $(LIBS)
+
+mnash: $(mnash_objs)
+	$(CPP) -o $@ $(mnash_objs) $(LIBS)
+
+%.o: %.cpp $(headers)
+	$(CPP) -c -o $@ $< $(FLAGS)
+
+%.o: %.cc
+	$(CPP) -c -o $@ $< $(FLAGS)
+
+clean: 
+	rm -f nash mnash *.o
