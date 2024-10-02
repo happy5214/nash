@@ -10,9 +10,7 @@ weight, see [this Prime-Wiki page](https://www.rieselprime.de/ziki/Nash_weight).
 The original versions of these calculators were published by Thomas Ritschel on
 a [MersenneForum thread](https://www.mersenneforum.org/showthread.php?t=7213).
 The source history of those versions is included as the `mersenne-forum` branch
-of this repository. I have restructured the code by refactoring the common code
-into the `nash_lib.c` module, and this code can be found in the `c/` folder. A
-partial rewrite/port in C++ can be found in the `cpp/` folder, and this contains
-a couple of speed improvements.
+of this repository. I ported this code to C++, and this code includes a couple
+of speed improvements.
 
 This program is licensed under the MIT License.
