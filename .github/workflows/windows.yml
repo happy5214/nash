@@ -33,25 +33,25 @@ jobs:
       - name: run msbuild debug
         run: msbuild "${env:GITHUB_WORKSPACE}\build\nash.sln" /p:Configuration=Debug
       - name: upload artifact
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: nash-release
           path: ${{ github.workspace }}/build/Release/nash.exe
           if-no-files-found: error
       - name: upload artifact
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: nash-debug
           path: ${{ github.workspace }}/build/Debug/nash.exe
           if-no-files-found: error
       - name: upload artifact
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: mnash-release
           path: ${{ github.workspace }}/build/Release/mnash.exe
           if-no-files-found: error
       - name: upload artifact
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: mnash-debug
           path: ${{ github.workspace }}/build/Debug/mnash.exe

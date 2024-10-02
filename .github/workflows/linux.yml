@@ -37,13 +37,13 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
    
     - name: upload artifact
-      uses: actions/upload-artifact@v2.2.0
+      uses: actions/upload-artifact@v4.4.0
       with:
         name: nash-release
         path: ${{ github.workspace }}/build/nash
         if-no-files-found: error
     - name: upload artifact
-      uses: actions/upload-artifact@v2.2.0
+      uses: actions/upload-artifact@v4.4.0
       with:
         name: mnash-release
         path: ${{ github.workspace }}/build/mnash
