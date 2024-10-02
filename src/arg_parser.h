@@ -40,6 +40,9 @@
    (without whitespace), or '--<long_option>=<argument>'.
 */
 
+#include <string>
+#include <vector>
+
 class Arg_parser
   {
 public:
