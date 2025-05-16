@@ -9,6 +9,8 @@ weight, see [this Prime-Wiki page](https://www.rieselprime.de/ziki/Nash_weight).
 
 The original versions of these calculators were published by Thomas Ritschel on
 a [MersenneForum thread](https://www.mersenneforum.org/showthread.php?t=7213).
+They were based on a Java applet coded by Jack Brennen (code available at the
+[Wayback Machine](https://web.archive.org/web/20230421222216/https://www.brennen.net/primes/ProthWeight.java)).
 The source history of those versions is included as the `mersenne-forum` branch
 of this repository. I ported this code to C++, and this code includes a couple
 of speed improvements.
