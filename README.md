@@ -8,7 +8,7 @@ weight is used; these calculators support two). For more information on the Nash
 weight, see [this Prime-Wiki page](https://www.rieselprime.de/ziki/Nash_weight).
 
 The original versions of these calculators were published by Thomas Ritschel on
-a [MersenneForum thread](https://www.mersenneforum.org/showthread.php?t=7213).
+a [MersenneForum thread](https://www.mersenneforum.org/node/5603).
 They were based on a Java applet coded by Jack Brennen (code available at the
 [Wayback Machine](https://web.archive.org/web/20230421222216/https://www.brennen.net/primes/ProthWeight.java)).
 The source history of those versions is included as the `mersenne-forum` branch
