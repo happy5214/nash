@@ -16,7 +16,7 @@
 
 static const char * invocation_name = "mnash";
 
-void print_help() {
+static void print_help() {
 	printf("MNash - a tool for computing Nash weights for sequences k*b^n+-1\n\n");
 	printf("usage: %s <kmin> <kmax> <kstep> <b>\n", invocation_name);
 	printf("or:    %s <kmin> <kmax> <kstep>\n\n", invocation_name);
@@ -30,10 +30,10 @@ void print_help() {
 	printf("   14  3 1524 1523\n");
 	printf("The first two values are k and b, the third value (1524) is the\n");
 	printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
-	printf("The forth value is the Nash weight for 0 <= n < 10000.\n");
+	printf("The fourth value is the Nash weight for 0 <= n < 10000.\n");
 }
 
-int main(int argc, char* argv[]) {
+int main(const int argc, const char * const argv[]) {
 	if (argc > 0) {
 		invocation_name = argv[0];
 	}
@@ -93,11 +93,10 @@ int main(int argc, char* argv[]) {
 		base_str = "2";
 	}
 
-	mpz_class k, kstart, kstop, kstep;
-	kstart = k_min;
-	kstop = k_max;
-	kstep = k_step;
-	k = kstart;
+	const mpz_class kstart(k_min);
+	const mpz_class kstop(k_max);
+	mpz_class kstep(k_step);
+	mpz_class k = kstart;
 
 	const unsigned int base = (unsigned int) std::stoi(base_str);
 

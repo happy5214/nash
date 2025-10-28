@@ -16,7 +16,7 @@
 
 static const char * invocation_name = "nash";
 
-void print_help() {
+static void print_help() {
 	printf("Nash - a tool for computing Nash weights for sequences k*b^n+-1\n\n");
 	printf("usage: %s <k> <b>\n", invocation_name);
 	printf("or:    %s <k>\n\n", invocation_name);
@@ -31,7 +31,7 @@ void print_help() {
 	printf("The fourth value is the Nash weight for 0 <= n < 10000.\n");
 }
 
-int main(int argc, char* argv[]) {
+int main(const int argc, const char * const argv[]) {
 	if (argc > 0) {
 		invocation_name = argv[0];
 	}
@@ -77,8 +77,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	const unsigned int base = (unsigned int) std::stoi(base_str);
-	mpz_class k;
-	k = k_str;
+	const mpz_class k(k_str);
 
 	const int kSign = sgn(k);
 	if (kSign == 0) {
