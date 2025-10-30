@@ -15,4 +15,5 @@ The source history of those versions is included as the `mersenne-forum` branch
 of this repository. I ported this code to C++, and this code includes a couple
 of speed improvements.
 
-This program is licensed under the MIT License.
+This program is licensed under the MIT License, except for the `Arg_parser`
+code, which is under a 2-clause BSD license.
