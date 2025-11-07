@@ -25,10 +25,10 @@ NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRi
 
 	for (unsigned int modulus = 1; modulus <= SIEVE_LIMIT; modulus++) {
 		std::bitset<SIEVE_LIMIT> offsets;
-		for (const Factor& factor : factors) {
-			if (modulus % factor.second == 0) {
-				for (unsigned int j = factor.first; j < modulus; j += factor.second) {
-					offsets.set(j);
+		for (const auto [factorOffset, factorModulus] : factors) {
+			if (modulus % factorModulus == 0) {
+				for (unsigned int n = factorOffset; n < modulus; n += factorModulus) {
+					offsets.set(n);
 				}
 			}
 		}
@@ -49,9 +49,8 @@ std::vector<bool> NashSieve::sieve(const unsigned int min, const unsigned int ma
 	std::vector<bool> sieveData;
 	sieveData.assign(sieveSize, true);
 
-	for (const Factor& factor : factors) {
-		unsigned int n = factor.first;
-		const unsigned int modulus = factor.second;
+	for (const auto [offset, modulus] : factors) {
+		unsigned int n = offset;
 		for (; n < min; n += modulus) {}
 		for (; n < max; n += modulus) {
 			sieveData[n - min] = false;
@@ -68,9 +67,8 @@ std::bitset<sieveSize> NashSieve::sieve(const std::size_t min) const {
 	std::bitset<sieveSize> sieveData;
 	sieveData.set();
 
-	for (const Factor& factor : factors) {
-		unsigned int n = factor.first;
-		const unsigned int modulus = factor.second;
+	for (const auto [offset, modulus] : factors) {
+		unsigned int n = offset;
 		for (; n < min; n += modulus) {}
 		for (; n < max; n += modulus) {
 			sieveData.reset(n - min);
@@ -80,15 +78,15 @@ std::bitset<sieveSize> NashSieve::sieve(const std::size_t min) const {
 	return sieveData;
 }
 
-const unsigned int NashSieve::standard_nash_weight() const {
+unsigned int NashSieve::standard_nash_weight() const {
 	return calculate_nash_weight(100000);
 }
 
-const unsigned int NashSieve::proth_nash_weight() const {
+unsigned int NashSieve::proth_nash_weight() const {
 	return calculate_nash_weight(0);
 }
 
-const unsigned int NashSieve::calculate_nash_weight(const unsigned int min) const {
+unsigned int NashSieve::calculate_nash_weight(const unsigned int min) const {
 	const std::bitset<10000> sieveData = sieve<10000>(min);
 
 	return sieveData.count();
