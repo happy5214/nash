@@ -85,7 +85,7 @@ int main(const int argc, const char * const argv[]) {
 		return 1;
 	}
 
-	const NashSieve siever(base, isRiesel ? -k : k);
+	const NashSieve siever(base, k, isRiesel);
 	const unsigned int standardWeight = siever.standard_nash_weight();
 	const unsigned int prothWeight = siever.proth_nash_weight();
 	printf("%s %u %4u %4u\n", k_str.c_str(), base, standardWeight, prothWeight);

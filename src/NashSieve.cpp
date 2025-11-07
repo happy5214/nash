@@ -14,9 +14,9 @@
 #define SIEVE_LIMIT 256
 #define SIEVE_P_TEST_SIZE SIEVE_LIMIT * 2
 
-NashSieve::NashSieve(const unsigned int base, const mpz_class k) {
+NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel) {
 	mpz_class pTable[SIEVE_P_TEST_SIZE];
-	mpz_class temp = k;
+	mpz_class temp = isRiesel ? -k : k;
 
 	for (unsigned int n = 0; n < SIEVE_P_TEST_SIZE; n++) {
 		pTable[n] = temp + 1;

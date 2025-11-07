@@ -113,7 +113,7 @@ int main(const int argc, const char * const argv[]) {
 	const int comp = cmp(k, kstop);
 
 	while (cmp(k, kstop) * comp >= 0) {  // run until sign of comparison changes
-		const NashSieve siever(base, isRiesel ? -k : k);
+		const NashSieve siever(base, k, isRiesel);
 		const unsigned int standardWeight = siever.standard_nash_weight();
 		const unsigned int prothWeight = siever.proth_nash_weight();
 		if ((minimumWeight <= maximumWeight && (standardWeight >= minimumWeight && standardWeight <= maximumWeight)) ||

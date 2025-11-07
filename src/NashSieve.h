@@ -18,7 +18,7 @@ typedef std::pair< unsigned int, unsigned int > Factor;
 
 class NashSieve {
 public:
-	NashSieve(const unsigned int base, const mpz_class k);
+	NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel);
 
 	std::vector<bool> sieve(const unsigned int min, const unsigned int max) const;
 	template <std::size_t sieveSize>
