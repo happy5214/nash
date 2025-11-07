@@ -20,7 +20,7 @@ public:
 
 	std::vector<bool> sieve(const unsigned int min, const unsigned int max) const;
 	template <std::size_t sieveSize>
-	std::bitset<sieveSize> sieve(std::size_t min) const;
+	std::bitset<sieveSize> sieve(const std::size_t min) const;
 
 	unsigned int standard_nash_weight() const;
 	unsigned int proth_nash_weight() const;
