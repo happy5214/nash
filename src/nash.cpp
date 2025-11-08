@@ -4,8 +4,6 @@
    based on Jack Brennen's Java applet
 */
 
-#include <cstdio>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 
@@ -14,21 +12,21 @@
 #include "arg_parser.h"
 #include "NashSieve.h"
 
-static const char * invocation_name = "nash";
+static std::string invocation_name = "nash";
 
 static void print_help() {
-	printf("Nash - a tool for computing Nash weights for sequences k*b^n+-1\n\n");
-	printf("usage: %s <k> <b>\n", invocation_name);
-	printf("or:    %s <k>\n\n", invocation_name);
-	printf("If no base <b> is given, b=2 is assumed.\n");
-	printf("By default Proth sequences (k*b^n+1) are assumed.\n");
-	printf("For Riesel sequences (k*b^n-1), add the -r parameter.\n\n\n");
-	printf("Example (computing the Nash weight for 14*17^n-1):\n\n");
-	printf("   %s -r 14 17\n\n", invocation_name);
-	printf("   14 17  803  800\n\n");
-	printf("The first two values are k and b, the third value (803) is the\n");
-	printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
-	printf("The fourth value is the Nash weight for 0 <= n < 10000.\n");
+	std::cout << "Nash - a tool for computing Nash weights for sequences k*b^n+-1\n\n";
+	std::cout << "usage: " << invocation_name << " <k> <b>\n";
+	std::cout << "or:    " << invocation_name << " <k>\n\n";
+	std::cout << "If no base <b> is given, b=2 is assumed.\n";
+	std::cout << "By default Proth sequences (k*b^n+1) are assumed.\n";
+	std::cout << "For Riesel sequences (k*b^n-1), add the -r parameter.\n\n\n";
+	std::cout << "Example (computing the Nash weight for 14*17^n-1):\n\n";
+	std::cout << "   " << invocation_name << " -r 14 17\n\n";
+	std::cout << "   14 17  803  800\n\n";
+	std::cout << "The first two values are k and b, the third value (803) is the\n";
+	std::cout << "standard Nash weight for the interval 100000 <= n < 110000.\n";
+	std::cout << "The fourth value is the Nash weight for 0 <= n < 10000.\n";
 }
 
 int main(const int argc, const char * const argv[]) {
@@ -88,7 +86,7 @@ int main(const int argc, const char * const argv[]) {
 	const NashSieve siever(base, k, isRiesel);
 	const unsigned int standardWeight = siever.standard_nash_weight();
 	const unsigned int prothWeight = siever.proth_nash_weight();
-	printf("%s %u %4u %4u\n", k_str.c_str(), base, standardWeight, prothWeight);
+	std::cout << k << " " << base << " "  << standardWeight << " "  << prothWeight << std::endl;
 
 	return 0;
 }

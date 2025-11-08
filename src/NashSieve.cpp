@@ -4,6 +4,7 @@
    based on Jack Brennen's Java applet
 */
 
+#include <array>
 #include <bitset>
 #include <vector>
 
@@ -15,16 +16,17 @@
 #define SIEVE_P_TEST_SIZE SIEVE_LIMIT * 2
 
 NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel) {
-	mpz_class pTable[SIEVE_P_TEST_SIZE];
+	std::array<mpz_class, SIEVE_P_TEST_SIZE> pTable;
 	mpz_class temp = isRiesel ? -k : k;
 
-	for (unsigned int n = 0; n < SIEVE_P_TEST_SIZE; n++) {
-		pTable[n] = temp + 1;
+	for (auto&& tableEntry : pTable) {
+		tableEntry = temp + 1;
 		temp *= base;
 	}
 
 	for (unsigned int modulus = 1; modulus <= SIEVE_LIMIT; modulus++) {
 		std::bitset<SIEVE_LIMIT> offsets;
+
 		for (const auto [factorOffset, factorModulus] : factors) {
 			if (modulus % factorModulus == 0) {
 				for (unsigned int n = factorOffset; n < modulus; n += factorModulus) {
@@ -32,6 +34,7 @@ NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRi
 				}
 			}
 		}
+
 		for (unsigned int offset = 0; offset < modulus; offset++) {
 			if (!offsets.test(offset)) {
 				temp = gcd(pTable[offset], pTable[offset + modulus]);
