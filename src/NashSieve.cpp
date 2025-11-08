@@ -7,16 +7,15 @@
 #include <array>
 #include <bitset>
 #include <vector>
+#include <cstdlib>
 
 #include <gmpxx.h>
 
 #include "NashSieve.h"
 
-#define SIEVE_LIMIT 256
-#define SIEVE_P_TEST_SIZE SIEVE_LIMIT * 2
-
-NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel) {
-	std::array<mpz_class, SIEVE_P_TEST_SIZE> pTable;
+template <std::size_t sieveLimit>
+NashSieve<sieveLimit>::NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel) {
+	std::array<mpz_class, sieveLimit << 2> pTable;
 	mpz_class temp = isRiesel ? -k : k;
 
 	for (auto&& tableEntry : pTable) {
@@ -24,8 +23,8 @@ NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRi
 		temp *= base;
 	}
 
-	for (unsigned int modulus = 1; modulus <= SIEVE_LIMIT; modulus++) {
-		std::bitset<SIEVE_LIMIT> offsets;
+	for (unsigned int modulus = 1; modulus <= sieveLimit; modulus++) {
+		std::bitset<sieveLimit> offsets;
 
 		for (const auto [factorOffset, factorModulus] : factors) {
 			if (modulus % factorModulus == 0) {
@@ -46,7 +45,8 @@ NashSieve::NashSieve(const unsigned int base, const mpz_class k, const bool isRi
 	}
 }
 
-std::vector<bool> NashSieve::sieve(const unsigned int min, const unsigned int max) const {
+template <std::size_t sieveLimit>
+std::vector<bool> NashSieve<sieveLimit>::sieve(const unsigned int min, const unsigned int max) const {
 	const unsigned int sieveSize = max - min;
 
 	std::vector<bool> sieveData;
@@ -63,8 +63,9 @@ std::vector<bool> NashSieve::sieve(const unsigned int min, const unsigned int ma
 	return sieveData;
 }
 
+template <std::size_t sieveLimit>
 template <std::size_t sieveSize>
-std::bitset<sieveSize> NashSieve::sieve(const std::size_t min) const {
+std::bitset<sieveSize> NashSieve<sieveLimit>::sieve(const std::size_t min) const {
 	const std::size_t max = min + sieveSize;
 
 	std::bitset<sieveSize> sieveData;
@@ -81,15 +82,18 @@ std::bitset<sieveSize> NashSieve::sieve(const std::size_t min) const {
 	return sieveData;
 }
 
-unsigned int NashSieve::standard_nash_weight() const {
+template <std::size_t sieveLimit>
+unsigned int NashSieve<sieveLimit>::standard_nash_weight() const {
 	return calculate_nash_weight(100000);
 }
 
-unsigned int NashSieve::proth_nash_weight() const {
+template <std::size_t sieveLimit>
+unsigned int NashSieve<sieveLimit>::proth_nash_weight() const {
 	return calculate_nash_weight(0);
 }
 
-unsigned int NashSieve::calculate_nash_weight(const unsigned int min) const {
+template <std::size_t sieveLimit>
+unsigned int NashSieve<sieveLimit>::calculate_nash_weight(const unsigned int min) const {
 	const std::bitset<10000> sieveData = sieve<10000>(min);
 
 	return sieveData.count();

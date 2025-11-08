@@ -83,7 +83,7 @@ int main(const int argc, const char * const argv[]) {
 		return 1;
 	}
 
-	const NashSieve siever(base, k, isRiesel);
+	const StandardNashSieve siever(base, k, isRiesel);
 	const unsigned int standardWeight = siever.standard_nash_weight();
 	const unsigned int prothWeight = siever.proth_nash_weight();
 	std::cout << k << " " << base << " "  << standardWeight << " "  << prothWeight << std::endl;

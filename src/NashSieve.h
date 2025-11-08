@@ -11,9 +11,11 @@
 #include <forward_list>
 #include <utility>
 #include <vector>
+#include <cstdlib>
 
 #include <gmpxx.h>
 
+template <std::size_t sieveLimit>
 class NashSieve {
 public:
 	NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel);
@@ -30,5 +32,8 @@ private:
 
 	unsigned int calculate_nash_weight(const unsigned int min) const;
 };
+
+template class NashSieve<256>;
+typedef NashSieve<256> StandardNashSieve;
 
 #endif // NASH_SIEVE_H
