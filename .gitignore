@@ -1,3 +1,4 @@
 nash
 mnash
 *.o
+*.so
