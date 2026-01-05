@@ -27,7 +27,7 @@ mnash: $(nash_objs) $(mnash_app_objs) $(arg_parser_objs)
 libnash: $(libnash_so)
 
 libnash.so: $(libnash_objs) $(nash_objs)
-	$(CPP) $(LIB_FLAGS) -shared -o $@ $^
+	$(CPP) $(LIB_FLAGS) -shared -o $@ $^ $(LIBS)
 
 %.o: %.cpp $(nash_headers) $(arg_parser_headers)
 	$(CPP) $(FLAGS) $(LIB_FLAGS) -c $< -o $@
