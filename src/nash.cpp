@@ -5,6 +5,7 @@
 */
 
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include <gmpxx.h>
@@ -77,16 +78,15 @@ int main(const int argc, const char * const argv[]) {
 	const unsigned int base = (unsigned int) std::stoi(base_str);
 	const mpz_class k(k_str);
 
-	const int kSign = sgn(k);
-	if (kSign == 0) {
-		std::cerr << "k cannot be 0" << std::endl;
+	try {
+		const StandardNashSieve siever(base, k, isRiesel);
+		const unsigned int standardWeight = siever.standard_nash_weight();
+		const unsigned int prothWeight = siever.proth_nash_weight();
+		std::cout << k << " " << base << " "  << standardWeight << " "  << prothWeight << std::endl;
+	} catch (const std::domain_error& e) {
+		std::cerr << "Supplied value of parameter \"" << e.what() << "\" cannot be used for calculating Nash weights. Exiting..." << std::endl;
 		return 1;
 	}
-
-	const StandardNashSieve siever(base, k, isRiesel);
-	const unsigned int standardWeight = siever.standard_nash_weight();
-	const unsigned int prothWeight = siever.proth_nash_weight();
-	std::cout << k << " " << base << " "  << standardWeight << " "  << prothWeight << std::endl;
 
 	return 0;
 }
