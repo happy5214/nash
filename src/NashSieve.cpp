@@ -6,6 +6,7 @@
 
 #include <array>
 #include <bitset>
+#include <stdexcept>
 #include <vector>
 #include <cstdlib>
 
@@ -15,6 +16,13 @@
 
 template <std::size_t sieveLimit>
 NashSieve<sieveLimit>::NashSieve(const unsigned int base, const mpz_class k, const bool isRiesel) {
+	if (base < 2) {
+		throw std::domain_error("base");
+	}
+	if (k == 0) {
+		throw std::domain_error("k");
+	}
+
 	std::array<mpz_class, sieveLimit << 2> pTable;
 	mpz_class temp = isRiesel ? -k : k;
 
