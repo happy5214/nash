@@ -4,8 +4,6 @@
    based on Jack Brennen's Java applet
 */
 
-#include <cstdio>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 
@@ -14,23 +12,23 @@
 #include "arg_parser.h"
 #include "NashSieve.h"
 
-static const char * invocation_name = "mnash";
+static std::string invocation_name = "mnash";
 
 static void print_help() {
-	printf("MNash - a tool for computing Nash weights for sequences k*b^n+-1\n\n");
-	printf("usage: %s <kmin> <kmax> <kstep> <b>\n", invocation_name);
-	printf("or:    %s <kmin> <kmax> <kstep>\n\n", invocation_name);
-	printf("If no base <b> is given, b=2 is assumed.\n");
-	printf("By default Proth sequences (k*b^n+1) are assumed.\n");
-	printf("For Riesel sequences (k*b^n-1), add the -r parameter.\n\n\n");
-	printf("Example (computing the Nash weight for k*3^n-1 for k=10 to k=14):\n\n");
-	printf("   %s -r 10 14 2 3\n\n", invocation_name);
-	printf("   10  3 4054 4038\n");
-	printf("   12  3 2359 2369\n");
-	printf("   14  3 1524 1523\n");
-	printf("The first two values are k and b, the third value (1524) is the\n");
-	printf("standard Nash weight for the interval 100000 <= n < 110000.\n");
-	printf("The fourth value is the Nash weight for 0 <= n < 10000.\n");
+	std::cout << "MNash - a tool for computing Nash weights for sequences k*b^n+-1\n\n";
+	std::cout << "usage: " << invocation_name << " <kmin> <kmax> <kstep> <b>\n";
+	std::cout << "or:    " << invocation_name << " <kmin> <kmax> <kstep>\n\n";
+	std::cout << "If no base <b> is given, b=2 is assumed.\n";
+	std::cout << "By default Proth sequences (k*b^n+1) are assumed.\n";
+	std::cout << "For Riesel sequences (k*b^n-1), add the -r parameter.\n\n\n";
+	std::cout << "Example (computing the Nash weight for k*3^n-1 for k=10 to k=14):\n\n";
+	std::cout << "   " << invocation_name << " -r 10 14 2 3\n\n";
+	std::cout << "   10  3 4054 4038\n";
+	std::cout << "   12  3 2359 2369\n";
+	std::cout << "   14  3 1524 1523\n";
+	std::cout << "The first two values are k and b, the third value (1524) is the\n";
+	std::cout << "standard Nash weight for the interval 100000 <= n < 110000.\n";
+	std::cout << "The fourth value is the Nash weight for 0 <= n < 10000.\n";
 }
 
 int main(const int argc, const char * const argv[]) {
@@ -113,12 +111,12 @@ int main(const int argc, const char * const argv[]) {
 	const int comp = cmp(k, kstop);
 
 	while (cmp(k, kstop) * comp >= 0) {  // run until sign of comparison changes
-		const NashSieve siever(base, k, isRiesel);
+		const StandardNashSieve siever(base, k, isRiesel);
 		const unsigned int standardWeight = siever.standard_nash_weight();
 		const unsigned int prothWeight = siever.proth_nash_weight();
 		if ((minimumWeight <= maximumWeight && (standardWeight >= minimumWeight && standardWeight <= maximumWeight)) ||
 			(minimumWeight > maximumWeight && (standardWeight >= minimumWeight || standardWeight <= maximumWeight))) {
-			gmp_printf("%15Zd %d %4u %4u\n", k, base, standardWeight, prothWeight);
+			std::cout << k << " " << base << " " << standardWeight << " " << prothWeight << "\n";
 		}
 		k += kstep;
 	}
